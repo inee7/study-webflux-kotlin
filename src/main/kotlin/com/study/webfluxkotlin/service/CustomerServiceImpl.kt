@@ -28,7 +28,7 @@ class CustomerServiceImpl : CustomerService {
             it.value.name.contains(nameFilter, true)
         }.map(Map.Entry<Int, Customer>::value).toList()
 
-    override fun getMonoCustomer(id: Int) = customers[id]?.toMono()
+    override fun getMonoCustomer(id: Int) = customers[id]?.toMono() ?: Mono.empty()
 
     override fun searchFluxCustomers(nameFilter: String) =
         customers.filter {

@@ -8,9 +8,9 @@ interface CustomerService {
     fun getCustomer(id: Int): Customer?
     fun searchCustomers(nameFilter: String): List<Customer>
 
-    fun getMonoCustomer(id:Int): Mono<Customer>?
+    fun getMonoCustomer(id: Int): Mono<Customer>
     fun searchFluxCustomers(nameFilter: String): Flux<Customer>
 
-    fun createCustomer(customerMono: Mono<Customer>) : Mono<*>
+    fun createCustomer(customerMono: Mono<Customer>): Mono<Customer>
 
 }
