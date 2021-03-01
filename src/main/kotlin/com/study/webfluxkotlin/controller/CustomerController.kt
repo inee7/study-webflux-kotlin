@@ -21,4 +21,9 @@ class CustomerController(
     @GetMapping("/customers")
     fun getCustomers(@RequestParam(required = false, defaultValue = "") nameFilter: String) =
         customerService.searchCustomers(nameFilter)
+
+    @PostMapping("/customer")
+    fun createCustomer(@RequestBody customerMono: Mono<Customer>) =
+        ResponseEntity(customerService.createCustomer(customerMono), HttpStatus.CREATED)
+
 }

@@ -3,6 +3,7 @@ package com.study.webfluxkotlin.service
 import com.study.webfluxkotlin.model.Customer
 import com.study.webfluxkotlin.model.Customer.Telephone
 import org.springframework.stereotype.Service
+import reactor.core.publisher.Mono
 import reactor.kotlin.core.publisher.toFlux
 import reactor.kotlin.core.publisher.toMono
 import java.util.concurrent.ConcurrentHashMap
@@ -33,5 +34,11 @@ class CustomerServiceImpl : CustomerService {
         customers.filter {
             it.value.name.contains(nameFilter, true)
         }.map(Map.Entry<Int, Customer>::value).toFlux()
+
+    override fun createCustomer(customerMono: Mono<Customer>) =
+        customerMono.map {
+            customers[it.id] = it
+            it
+        }
 
 }
