@@ -1,5 +1,6 @@
 package com.study.webfluxkotlin.service
 
+import com.study.webfluxkotlin.CustomerExistException
 import com.study.webfluxkotlin.model.Customer
 import com.study.webfluxkotlin.model.Customer.Telephone
 import org.springframework.stereotype.Service
@@ -36,9 +37,13 @@ class CustomerServiceImpl : CustomerService {
         }.map(Map.Entry<Int, Customer>::value).toFlux()
 
     override fun createCustomer(customerMono: Mono<Customer>) =
-        customerMono.map {
-            customers[it.id] = it
-            it
+        customerMono.flatMap {
+            if (customers[it.id] == null) {
+                customers[it.id] = it
+                it.toMono()
+            } else {
+                Mono.error(CustomerExistException("customer ${it.id} already exist"))
+            }
         }
 
 }
