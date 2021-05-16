@@ -14,19 +14,19 @@ class DatabaseInitializer {
     @Autowired
     lateinit var mongoOperations: ReactiveMongoOperations
 
-    @PostConstruct
-    fun initData(){
-        mongoOperations.collectionExists("customers").subscribe{
-            if (!it) {
-                mongoOperations.createCollection("customers").subscribe {
-                    println("customers collections created")
-                }
-            }else {
-                customerRepository.save(Customer(1, "spring")).subscribe{
-                    println("Default customers created")
-                }
-            }
-        }
+    companion object {
+        val initialCustomers = listOf(
+            Customer(1, "kotlin"),
+            Customer(2, "Spring"),
+            Customer(3, "Microservice", Customer.Telephone("+33", "123213123"))
 
+        )
+    }
+
+    @PostConstruct
+    fun initData() {
+        customerRepository.saveAll(initialCustomers).subscribe {
+            println("Default customers created")
+        }
     }
 }
